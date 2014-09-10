@@ -1,0 +1,269 @@
+////////////////////////////////////BASE DE DATOS///////////////////////////////////////
+Se crea una base de datos en el phpmyadmin
+Se crea una migracion //para esto tenemos que colocarnos en el CMD en nuestro proyecto para poder correr artisan//
+///Comandos////
+php artisan migrate:install  //esto instala el programa para poder hacer las migraciones//
+
+php artisan migrate:make cretae_nombre_de_la_tabla_table // se crea la tabla en nuetra base de datos creada en el paso anterior producrar nombrarlas pluralmente.
+///Fin de Comandos///
+Despues de hacer esto hay que editar el archivo que nos creo laravel en la carpeta de migraciones en este archivo  se pondran todos los campos a desear que contenga nuestra tabla de la siguiente manera.
+
+Schema::table('nombre de la tabla en plural ' , function($table){  // se crea la funcion con la variable $table que es la que nos dejara crear los demas campos
+	$table->cretae();  // con esto se crea la tabla
+	$table->increments('id'); // se crea el campo ID que ala vez se toma como clave primaria
+	$table->string('nombre de los demas campos a utilizar');
+	""->""...
+});
+//Todo lo de arriba apartir del Schema va dentro de la funcion  up(){}//
+//En la funcion down(){}// sirve para regresar o eliminar la tabla creada usando lo siguiente //Schema::drop('nombre de la tabla creada en el metodo uo()');//
+
+Una ves terminado de llenar los campos a crear nos regresamos a nuestra consola y ejecutamos lo siguiente ///php artisan migrate/// si queremos desaser los cambios ///php artisan migrate:rollback///
+
+/////////////////////////////////////CREACIOM DE MODELOS//////////////////////////////////
+Creamos un modelo para representar la tabla que creamos "la tabla viene en plural" y el modelo es en singular ejemplo tabla "users" modelo "User.php" ///la primera letra en MAYUSCULA y la palabra en singular///
+
+la estructura es la siguiente:
+<?php  
+class Nombredelmodelo extends Eloquent{
+	
+}
+
+?>
+
+si la tabla que creamos no tuviera el nombre en plural se usa lo siguiente:
+
+<?php  
+class Nombredelmodelo extends Eloquent{
+	protected $table = 'otro_nombre_para_la_tabla';
+}
+
+?>
+
+/////////////////////////////////////////////RUTAS///////////////////////////////////
+
+su estructura es la siguiente
+
+Route::get('uri' , function(){  ///uri es la url que ira al navegador y que nos mostrara lo que contenga la ruta///
+//Acá escribiremos el código.
+});
+
+////////////////////////////////////Insertar Registros con codigo duro///////////////////////////////////
+Ejemplo
+
+Route::get('URI', function(){  ///en este caso cada vez que ingresemos ala URI indicada se creara un nuevo registro en la DB///
+	$user = new User(); ///Indicamos que se creara un nuevo objeto y la variable user es la que usaremos para insertar los demas///
+	$user-> email = 'texto a ingresar';  ///email es el campo como se llama en la base de datos///
+	$user->nombre = 'texto a ingresar';
+	$user->password = Hash::make('1234'); ///Cuando se guarde una password es recomendable encriptarla con Hash::make///
+	...
+	...
+	$user->save(); ///Esto nos permite guardar el registro///
+   return 'Usuario insertado correctamente.';  ///Esto regresara un mensaje para saber que la operacion se llevo acabo///
+});
+
+/////////////////////////////////Recuperar registros por su id////////////////////////////////
+$user = User::find(1); ///El 1 es el ID que queremos recuperar///
+return $user->name; ///name es el campo que queremos que nos devuelva puede ser cualquiera que exista en la DB///
+
+///////////////////////////////Modificar registros/////////////////////
+Route::get('test', function() {
+   $user = User::find(1);    ///Buscamos el registro que queremos modificar////
+   $user->real_name = 'fulanito'; ///ponemos el campo que queremos modificar existente en la DB///
+   $user->save(); ///Guardamos el registro modificado///
+   return 'El registro ha sido modificado';
+});
+
+//////////////////////////////////Modificar un registro en especifico/////////////////////////////////
+Route::get('test', function() {
+   $user = User::where('real_name', 'fulanito')->first(); ///esto sirve para recuperar un campo con una propiedad especifica en este caso fulanito deveria existir para mostrar su email. first() sirve para que nos arroje el primer resultado que coincida con lo pedido en where///
+   return $user->email;
+});
+
+//////////////////////////////Eliminar registros/////////////////////////////
+
+Route::get('test', function() {
+   $user = User::find(1); ///buscamos el registro a eliminar por su ID///
+   $user->delete(); ///usamos la funcion deleate para borrarlo de la base de datos///
+   return 'Registro eliminado';
+});
+
+///////////////////////////////Recuperar lista de registros//////////////////////
+
+Route::get('test', function() {
+   $users = User::all();  ///indica con el modelo que nos arroje todos los usuarios registrados///
+   $nombres = ''; /// creamos la variable que almacenara los datos de la base de datos///
+   foreach($users as $item){ /// este foreach ara un ciclo hasta mostrar todos los usuarios en la tabla///
+      $nombres .= $item->real_name . '<br />'; ///con esto se imprimiran los datos y con un salto de linea <br />///
+   }
+   return $nombres;  ///imprime la funcion osea los nombres de los usuarios///
+});
+
+
+//////////////////////////////////Filtros//////////////////////////////////////////
+
+Route::get('test', function() {
+   $users = User::where('active', true)->orderBy('real_name')->get();  ///los dos parametros de where('nombre del cmapo' , valor a verificar)->orderBBy('como ordenara la lista puede ser por nombre,numero,fecha,etc.')->get(); get obtiene los datos ///
+   $nombres = '';
+   foreach($users as $item){
+      $nombres .= $item->real_name . '<br />';
+   }
+   return $nombres;
+});
+
+////////////////////////////////CONTROLADORES//////////////////////////
+Creamos un controlador empesado con la primera letra en MAYUSCULA y despues Controller ejemplo   TestController.php
+
+y su contenido es el siguiente
+
+<?php
+ class TestController extends BaseController {
+ }
+?>
+
+
+La URL mediante controladores y acciones es de la siguiente manera
+
+http://mipagina/controlador/accion
+
+
+Las acciones se crean de la siguiente manera
+
+<?php
+ class TestController extends BaseController {
+    public function getIndex(){ ///get debe ir antes de la accion///
+       return 'Bienvenido a nuestro primer controlador'; ///al momento de ingresar la URL nos dara este aviso///
+    }
+ }
+?>
+
+Despues de haber creado el controller hay que linkearlo con las rutas de la siguiente manera
+
+Route::controller('test', 'TestController'); si ya habia una accion con la ruta 'test' hay que eliminarla // en este ejemplo el primer parametro es la URI y el segundo el nombre del controlador.
+
+en los controllers tambien se pueden agregar parametros despues de la accion quedando de la siguiente forma
+
+http://mipagina/controlador/accion/parametro
+
+public function getUsuario($id){ ///ID es el parametro que resivira por medio de la URL///
+      $user = User::find($id);
+      return "{$user->real_name} / {$user->email}";
+   }
+
+ Ejemplo:  http://localhost:8000/test/usuario/1 /// 1 es el parametro ///
+
+
+ ///////////////////////////////////////VISTAS///////////////////////////////////
+
+las vistas son nombre.blade.php  blade es el compilador que nos ofrece laravel para crear plantillas
+
+ incluir una vista dentro de un controllador
+
+ <?php
+class TestController extends BaseController {
+   public function getIndex() {
+      return View::make('test.index');  ////View::make manda a llamar la vista 'test' es la carpeta e index es el archivo///
+   }
+}
+?>
+
+///////////////////////////////Pasar variables del controlador a la vista /////////////////////////////////
+
+///Para pasar una variable del controlador a la vista debemos usar el método with():///
+
+<?php
+class TestController extends BaseController {
+   public function getIndex() {
+      $nombre = 'Fernando';
+      return View::make('test.index')->with('nombre', $nombre);
+   }
+}
+?>
+///El método with() recibe dos parámetros, la variable con el nombre que estará disponible en la vista y el valor de ésta.///
+
+y en la vista usamos
+
+<h1> Hola {{ $nombre }} </h1>  ///{{ variable}} sirve para imprimir la variable en el lugar deseado es como si fuera un echo en php///
+
+los if y foreach se escriben primero con un @.
+
+Ejemplo:
+
+@if($users)
+   <ul>
+      @foreach($users as $item)
+         <li> {{ $item->real_name }} - {{ $item->email }} </li>
+      @endforeach
+   </ul>
+@else
+   <p> No hay usuarios cargados </p>
+@endif
+
+///////////////////////// CRUD ///////////////////////////////
+
+Create (crear), Read (leer), Update (modificar) y Delete (eliminar) 
+
+Creacion de CRUD este utiliza los verbos de HTTP
+
+GET se utiliza para mostrar registros, 
+POST para insertar, 
+PUT para modificar, 
+DELETE para eliminar.
+
+
+para crear el CRUD se utiliza lo siguiente
+
+creamos un archivo en controllers donde queremos que este nuestro administrador en este caso sera UsersController.php
+
+Una vez creado vamos al archivo routes.php y agregamos la siguiente ruta
+
+
+Route::resource('users' , 'UsersController'); ///resource permite identificar a laravel que esto se trata de un CRUD///
+
+Despues de crear la ruta abrimos la consola en nuestro proyecto e ingresamos lo siguiente
+
+///COMANDOS////
+
+php artisan routes
+
+///FIN DE COMANDOS///
+
+Por lo cual laravel nos mostrara las rutas y acciones creadas
+
+Las acciones que debemos crear para el funcionamiento correcto de este controlador son siente: index(), show(), create(), store(), edit(), update() y destroy().
+
+
+En show, update y destroy; el path es el mismo: “/users/{id}”, lo que le indicará al servidor qué es lo que debe hacer será la forma en que viene la petición. GET para show, PUT para update y DELETE para destroy.
+
+entonces nuestro controllador quedaria asi:
+
+<?php
+class UsersController extends BaseController {
+   public function index() {
+   }
+   public function show($id) { 
+   }
+   public function create() { 
+   }
+   public function store() { 
+   }
+   public function edit($id) { 
+   }
+   public function update($id) { 
+   }
+   public function destroy($id) { 
+   }
+}
+?>
+
+Crearemos las vistas que usarán estas acciones. Así que primero vamos a app -> views, y dentro creamos una carpeta users. Dentro de éste vamos a crear tres vistas: index.blade.php, show.blade.php y save.blade.php.
+
+
+El método index() nos servirá para mostrar un listado con registros se accederá por GET.
+
+Con show() se recuperará los datos de un registro en particular, recibirá como parámetro justamente el id de ese registro, y esta petición también será por GET.
+
+Los métodos create() y store() trabajarán en conjunto. El primero nos mostrará un formulario para insertar un nuevo registro y se accederá por GET. Y el segundo será la acción que inserte el registro que recibió del formulario, en este caso, como se inserta el tipo de petición será POST.
+
+En el caso de los métodos edit() y update(). El primero nos mostrará un formulario para modificar un registro y se accederá por GET. Y el segundo será la acción que modifique ese registro, y  se accederá por PUT. En el caso de ambos métodos recibirán un parámetro que será el id del registro a modificar.
+
+Y finalmente tendremos la acción destroy(), que servirá para eliminar un registro, y se accederá por el método DELETE. Recibirá un parámetro, el id del registro a eliminar.

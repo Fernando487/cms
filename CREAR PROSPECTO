@@ -1,0 +1,152 @@
+///////////////PROSPECTOS//////////////////
+CREAR PROSPECTO
+
+se crea el prospecto llénando la informacion
+
+nombre completo
+email
+telefono de contacto
+direccion
+RFC
+desea facturar? si/ no
+tipo de proyecto- desplegable con opciones
+vendedor encargado.- campo oculto usuario_id
+
+guardar//// una vez guardado se agregara a una lista en la pestaña de clientes y solo el vendedor asignado podra borrar o editar el registro.
+
+en la vista de actualizacion del prospecto se creara un checkbox  donde se pregunstara si se a concretado la venta para poder pasar de prospecto a cliente.
+
+al seleccionar el checkbox se crearan los siguientes campos  -  
+-asignacion de trabajadores, donde tendra opcion de asignar mas de dos trabajadores
+-tiempo estimado de entrega.
+-descuento
+-cargos variables
+-monto a pagar.
+-notificar a cliente y trabajadores. checkbox
+
+al guardar la vista de actualizacion el prospecto pasara a ser cliente y se le enviara un correo con la informacion de bienvenida, trabajadores asignados, costo del proyecto , tipo de servicio y una lista de la informacion a solicitar.
+
+una vez que el cliente pase a ser cliente y se vuelva a ver la vista de edicion del cliente se agregara un nuevo campo opcional de proyectos adjuntos con los campos de:
+
+proyecto y costo
+
+
+VISTA VER CLIENTE
+
+la primera ves que se crea el cliente y se va a la vista de ver se mostrara la siguiente informacion.
+
+nombre completo
+email
+telefono de contacto
+direccion
+RFC
+desea facturar? si/ no
+tipo de proyecto- desplegable con opciones
+vendedor encargado
+
+en la segunda vista se agregaran los demas campos nuevos divididos como
+
+DATOS GENERALES.
+nombre completo
+email
+telefono de contacto
+direccion
+RFC
+desea facturar? si/ no
+
+PROYECTO
+tipo de proyecto- 
+vendedor encargado.- 
+-trabajadores asignadps
+-tiempo estimado de entrega.
+-descuento
+-cargos variables
+-monto a pagar.
+-se notifico al cliente?
+
+en la tercera vista se agregarian otros campos en la seccion
+
+PROYECTOS ADJUNTOS
+-proyecto y costo
+
+
+/////////////VISTA DE CLIENTES////////////////
+UNA TABLA con la siguiente informacion
+
+nombre y empresa /telefono y email/ servicio/ estatus del cliente/estatus del proyecto/Vendedor/ ver/ ---editar/eliminar -solo el administrador o vendedor
+
+estatus del cliente: Prospecto/Cliente
+Estatus del proyecto: En espera/Cancelado/Liberado
+
+
+//////////////VISTA DE TRABAJADORES//////////////
+
+Crear nuevo Trabajador -solo administrador o vendedor
+
+Tabla
+
+-nombre
+-puesto
+-email
+-ver 
+-editar -solo el administrador o vendedor y una parte el trabajador
+-eliminar -solo el administrador o vendedor
+
+VISTA CREAR TABAJADOR
+-nombre
+-puesto
+-correo
+-usuario
+-password
+una ves creado enviar un correo al trabajador con sus datos de acceso
+
+VISTA VER TABAJADOR
+	datos del trabajador
+
+	Tabla
+	lista de proyectos
+	nombre del cliente y empresa/telefono y email/servicio/estatus del proyecto /ver
+
+		VISTA VER PROYECTO DEL TRABAJADOR
+			DATOS GENERALES.
+			nombre completo
+			email
+			telefono de contacto
+
+			PROYECTO
+			-tipo de proyecto.
+			-vendedor encargado. 
+			-tiempo estimado de entrega.
+			-Estatus del proyecto.
+			-comentarios:
+
+			lista de comentarios de todos los trabajadores asignados- cada vez que se haga un comentario enviar un correo al vendedor y a los trabajadores
+	Total de Proyectos asignados
+	Total de Proyectos Terminados
+
+VISTA EDITAR TABAJADOR
+
+correo:
+pasword:
+
+
+/////////////APLICACION///////////////
+CREAR USUARIO ADMINISTRADOR
+ESCOGER LOGO
+CAMBIAR COLORES
+cambiar layout
+
+
+
+
+//////////////REPORTE DE VENTAS//////////////
+
+graficas de Ventas totales  o separadas por diferentes servicios.
+exportar a csv o xls.
+
+/////////////Catalogo de Contraseas de Proyectos///////////////////
+
+Crear
+
+Tabla con lista de sitios
+Dominio / servidor/usuario ftp/contraseña ftp/ CMS /usuario/contraseña / editar/borrar
